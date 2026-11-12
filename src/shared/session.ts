@@ -10,6 +10,7 @@ export type Run = {
   start: number;
   end: number;
   notes: Note[];
+  target: number | null;
 };
 export type Result = {
   id: string;
@@ -22,6 +23,8 @@ export type Result = {
   hits: Hit[];
   practice: boolean;
   speed: number;
+  target?: number | null;
+  goalReached?: boolean;
 };
 export type PracticeConfig = {
   enabled: boolean;
@@ -29,7 +32,11 @@ export type PracticeConfig = {
   start: number;
   end: number;
 };
-export function makeRun(track: Track, config: PracticeConfig): Run {
+export function makeRun(
+  track: Track,
+  config: PracticeConfig,
+  target: number | null = null,
+): Run {
   const start = config.enabled ? config.start : 0;
   const end = config.enabled ? config.end : track.beats;
   return {
@@ -42,5 +49,6 @@ export function makeRun(track: Track, config: PracticeConfig): Run {
     notes: track.notes.filter(
       (n) => n.beat >= start && n.beat + n.duration <= end,
     ),
+    target,
   };
 }

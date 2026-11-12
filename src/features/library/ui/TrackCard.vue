@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import type { Track } from "../../../shared/chart";
-defineProps<{ track: Track; selected: boolean; index: number }>();
+defineProps<{
+  track: Track;
+  selected: boolean;
+  index: number;
+  achieved: boolean;
+}>();
 defineEmits<{ select: [id: string] }>();
 </script>
 <template>
@@ -19,7 +24,9 @@ defineEmits<{ select: [id: string] }>();
       ><span class="track-tags"
         >{{ track.bpm }} BPM <i>•</i> {{ track.mood.split("/")[1] }}</span
       ></span
-    ><span class="level"
+    >
+    <span v-if="achieved" class="goal-badge" title="已达成准确率目标">达标</span>
+    <span class="level"
       ><small>LEVEL</small
       ><b>{{ String(track.level).padStart(2, "0") }}</b></span
     ><span class="chosen">{{ selected ? "●" : "○" }}</span>

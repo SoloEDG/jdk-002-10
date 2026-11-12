@@ -13,6 +13,7 @@ const props = defineProps<{
   held: Set<Lane>;
   feedback: string;
   combo: number;
+  fullAccuracy: number;
 }>();
 defineEmits<{ down: [lane: Lane]; up: [lane: Lane] }>();
 const notes = computed(() =>
@@ -23,6 +24,17 @@ const notes = computed(() =>
     props.done,
   ),
 );
+const goalResult = computed(() => {
+  const r = props.run;
+  if (props.phase !== "finished" || !r || r.target === null) return null;
+  const reached = props.fullAccuracy >= r.target;
+  return {
+    practice: r.practice,
+    target: r.target,
+    reached,
+    gap: Math.abs(r.target - props.fullAccuracy),
+  };
+});
 </script>
 <template>
   <div class="stage">
@@ -44,6 +56,35 @@ const notes = computed(() =>
     <div v-if="phase === 'finished'" class="stage-message paused">
       <h3>TRACK COMPLETE</h3>
       <p>这一刻，属于你</p>
+      <div
+        v-if="goalResult"
+        class="goal-result"
+        :class="{
+          reached: goalResult.reached && !goalResult.practice,
+          practice: goalResult.practice,
+        }"
+      >
+        <template v-if="goalResult.practice">
+          <strong>练习不计入达标</strong>
+          <small>目标 {{ goalResult.target }}% · 全程准确率
+            {{ fullAccuracy.toFixed(1) }}%</small
+          >
+        </template>
+        <template v-else-if="goalResult.reached">
+          <strong>目标达成 ✓</strong>
+          <small
+            >{{ goalResult.target }}% 目标 · 领先
+            {{ goalResult.gap.toFixed(1) }}%</small
+          >
+        </template>
+        <template v-else>
+          <strong>未达目标</strong>
+          <small
+            >目标 {{ goalResult.target }}% · 还差
+            {{ goalResult.gap.toFixed(1) }}%</small
+          >
+        </template>
+      </div>
     </div>
     <template v-for="n in notes" :key="n.id"
       ><div

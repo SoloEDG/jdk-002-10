@@ -6,6 +6,7 @@ defineProps<{
   selectedId: string;
   search: string;
   locked: boolean;
+  achievedIds: Set<string>;
 }>();
 defineEmits<{ select: [id: string]; search: [value: string] }>();
 </script>
@@ -28,6 +29,7 @@ defineEmits<{ select: [id: string]; search: [value: string] }>();
         :track="t"
         :index="i"
         :selected="t.id === selectedId"
+        :achieved="achievedIds.has(t.id)"
         @select="!locked && $emit('select', $event)"
       />
       <p v-if="!tracks.length" class="muted">没有匹配曲目</p>

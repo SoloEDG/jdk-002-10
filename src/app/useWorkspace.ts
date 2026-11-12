@@ -4,6 +4,7 @@ import { usePerformance } from "../features/performance";
 import { useJudgment, bindInput } from "../features/judgment";
 import { usePractice } from "../features/practice";
 import { useRecords, makeResult } from "../features/records";
+import { useGoal } from "../features/goal";
 import { makeRun } from "../shared/session";
 import type { PracticeConfig } from "../shared/session";
 import type { Lane } from "../shared/chart";
@@ -13,18 +14,17 @@ export function useWorkspace() {
     practice = usePractice(),
     judgment = useJudgment(),
     records = useRecords(),
+    goal = useGoal(),
     error = ref("");
   const performance = usePerformance(
     (t) => judgment.tick(t),
     () => {
-      if (performance.run.value)
-        records.commit(
-          makeResult(
-            performance.run.value,
-            judgment.hits.value,
-            judgment.stats.value,
-          ),
-        );
+      const run = performance.run.value;
+      if (!run) return;
+      const result = makeResult(run, judgment.hits.value, judgment.stats.value);
+      records.commit(result);
+      // 仅正式演出完成时结算目标；练习与中途退出不会走到这里。
+      goal.markResult(result);
     },
   );
   const locked = computed(
@@ -33,7 +33,12 @@ export function useWorkspace() {
       performance.phase.value === "paused",
   );
   async function start() {
-    const run = makeRun(library.selected.value, practice.config.value);
+    // 本局目标在开局时固定，播放中无法修改；重新开始沿用当前设置。
+    const run = makeRun(
+      library.selected.value,
+      practice.config.value,
+      goal.targetFor(library.selectedId.value),
+    );
     judgment.reset(run);
     error.value = "";
     try {
@@ -48,7 +53,13 @@ export function useWorkspace() {
     library.select(id);
     practice.reset(library.selected.value.beats);
     performance.reset();
-    judgment.reset(makeRun(library.selected.value, practice.config.value));
+    judgment.reset(
+      makeRun(
+        library.selected.value,
+        practice.config.value,
+        goal.targetFor(library.selectedId.value),
+      ),
+    );
   }
   function down(lane: Lane) {
     if (performance.phase.value === "playing")
@@ -69,6 +80,14 @@ export function useWorkspace() {
   function updatePractice(patch: Partial<PracticeConfig>) {
     if (!locked.value) practice.update(patch, library.selected.value.beats);
   }
+  function setGoal(trackId: string, value: number) {
+    if (!locked.value && trackId === library.selectedId.value)
+      goal.setTarget(trackId, value);
+  }
+  function clearGoal(trackId: string) {
+    if (!locked.value && trackId === library.selectedId.value)
+      goal.clearTarget(trackId);
+  }
   let cleanup = () => {};
   const blur = () => {
     if (performance.phase.value === "playing") pause();
@@ -87,6 +106,7 @@ export function useWorkspace() {
     practice,
     judgment,
     records,
+    goal,
     performance,
     locked,
     error,
@@ -96,5 +116,7 @@ export function useWorkspace() {
     up,
     pause,
     updatePractice,
+    setGoal,
+    clearGoal,
   };
 }

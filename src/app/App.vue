@@ -4,10 +4,11 @@ import { LibraryPanel } from "../features/library";
 import { StageView, TransportBar } from "../features/performance";
 import { JudgmentPanel } from "../features/judgment";
 import { PracticePanel } from "../features/practice";
+import { GoalPanel } from "../features/goal";
 import { RecordsPanel } from "../features/records";
 import { secondsAt } from "../shared/chart";
 const w = useWorkspace();
-const { library: l, practice: p, judgment: j, records: r, performance: s } = w;
+const { library: l, practice: p, judgment: j, records: r, performance: s, goal: g } = w;
 </script>
 <template>
   <div class="workspace">
@@ -36,6 +37,7 @@ const { library: l, practice: p, judgment: j, records: r, performance: s } = w;
           :selected-id="l.selectedId.value"
           :search="l.search.value"
           :locked="w.locked.value"
+          :achieved-ids="g.achievedIds.value"
           @select="w.select"
           @search="l.search.value = $event"
         /><PracticePanel
@@ -43,6 +45,12 @@ const { library: l, practice: p, judgment: j, records: r, performance: s } = w;
           :config="p.config.value"
           :locked="w.locked.value"
           @update="w.updatePractice"
+        /><GoalPanel
+          :track-id="l.selectedId.value"
+          :entry="g.entryFor(l.selectedId.value)"
+          :locked="w.locked.value"
+          @set="w.setGoal"
+          @clear="w.clearGoal"
         />
       </div>
       <section class="performance panel">
@@ -68,6 +76,7 @@ const { library: l, practice: p, judgment: j, records: r, performance: s } = w;
           :held="j.held.value"
           :feedback="j.feedback.value"
           :combo="j.stats.value.combo"
+          :full-accuracy="j.stats.value.fullAccuracy"
           @down="w.down"
           @up="w.up"
         /><TransportBar
@@ -91,6 +100,8 @@ const { library: l, practice: p, judgment: j, records: r, performance: s } = w;
         <JudgmentPanel
           v-bind="j.stats.value"
           :hits="j.hits.value"
+          :target="s.run.value?.target ?? g.targetFor(l.selectedId.value)"
+          :practice="s.run.value?.practice ?? p.config.value.enabled"
         /><RecordsPanel
           :records="r.records.value"
           :latest="r.latest.value"

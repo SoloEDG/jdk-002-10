@@ -25,10 +25,15 @@ export function statistics(hits: Hit[], total: number) {
     maxCombo = Math.max(maxCombo, combo);
     points += weight[hit.grade];
   }
+  const noteCount = Math.max(1, total);
   return {
     combo,
     maxCombo,
-    score: Math.round((points / Math.max(1, total)) * 1000000),
+    score: Math.round((points / noteCount) * 1000000),
+    // 准确率按整首全部音符计算：未判定/漏打的音符按 0 分计入，
+    // 避免开头一次 PERFECT 就提前宣告达标。
+    fullAccuracy: (points / noteCount) * 100,
+    // 仅用于既有评级展示的“已命中音符”准确率，保留原口径。
     accuracy: hits.length ? (points / hits.length) * 100 : 100,
   };
 }

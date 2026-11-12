@@ -979,6 +979,224 @@ footer i {
   color: #748a5d;
   margin: 0 8px;
 }
+/* ---- 准确率目标（Goal Panel） ---- */
+.goal-flag {
+  color: #bcf366;
+  border: 1px solid #66764b;
+  background: #2c3324;
+  border-radius: 20px;
+  padding: 2px 8px;
+}
+.goal-heading h3 {
+  margin: 20px 0 8px;
+}
+.goal-heading p {
+  font-size: 11px;
+}
+.goal-empty {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.goal-empty p {
+  margin: 0;
+}
+.goal-set-btn {
+  border: 1px solid #66764b;
+  background: #2c3324;
+  color: #bcf366;
+  border-radius: 5px;
+  height: 34px;
+  font-size: 11px;
+}
+.goal-value-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0 12px;
+  font-size: 11px;
+  color: #a0a3ad;
+}
+.goal-value-row b {
+  color: #bcf366;
+  font-size: 16px;
+  font-weight: 500;
+}
+.goal-value-row em {
+  font-style: normal;
+  font-size: 11px;
+  color: #717784;
+  margin-left: 2px;
+}
+.goal-slider {
+  width: 100%;
+  accent-color: #bcf366;
+  height: 4px;
+}
+.goal-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: #666c77;
+  margin-top: 4px;
+}
+.goal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 16px;
+}
+.goal-number {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  color: #777e89;
+}
+.goal-number input {
+  width: 62px;
+  background: #111217;
+  border: 1px solid #30333b;
+  color: #b6bac4;
+  padding: 6px;
+  border-radius: 4px;
+}
+.goal-clear {
+  border: 1px solid #3b3e46;
+  background: #22242b;
+  color: #a5a9b1;
+  border-radius: 5px;
+  height: 30px;
+  padding: 0 12px;
+  font-size: 11px;
+}
+.goal-locked {
+  margin: 14px 0 0;
+  font-size: 10px;
+  color: #c9a06b;
+}
+/* ---- 演出中的目标差距 ---- */
+.goal-live {
+  margin-top: 20px;
+  border: 1px solid #3b4730;
+  background: #20251a;
+  border-radius: 6px;
+  padding: 13px 12px;
+}
+.goal-live.practice {
+  border-color: #3a3c44;
+  background: #1c1d24;
+}
+.goal-live-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: #a3b88e;
+}
+.goal-live-head b {
+  font-weight: 500;
+  color: #d89a76;
+}
+.goal-live-head b.reached {
+  color: #bcf366;
+}
+.goal-track {
+  position: relative;
+  height: 6px;
+  border-radius: 4px;
+  background: #2c2f27;
+  margin: 12px 0 9px;
+  overflow: visible;
+}
+.goal-track i {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #6a814e, #bcf366);
+}
+.goal-track em {
+  position: absolute;
+  top: -3px;
+  width: 2px;
+  height: 12px;
+  background: #e8f7d2;
+  transform: translateX(-1px);
+}
+.goal-live p {
+  margin: 0;
+  font-size: 10px;
+  color: #8fa07c;
+  font-variant-numeric: tabular-nums;
+}
+.goal-live.practice p {
+  color: #858a94;
+}
+.goal-live p small {
+  color: #9a8c6a;
+}
+/* ---- 曲库卡片达标标记 ---- */
+.goal-badge {
+  flex-shrink: 0;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #13160d;
+  background: #bcf366;
+  border-radius: 20px;
+  padding: 4px 8px;
+  font-weight: 700;
+}
+/* ---- 结算页目标结果 ---- */
+.goal-result {
+  margin: 22px auto 0;
+  max-width: 280px;
+  border: 1px solid #6a5048;
+  background: #241c18;
+  border-radius: 8px;
+  padding: 16px 18px;
+}
+.goal-result.reached {
+  border-color: #66764b;
+  background: #222b1c;
+}
+.goal-result.practice {
+  border-color: #3a3c44;
+  background: #1c1d24;
+}
+.goal-result strong {
+  display: block;
+  font-size: 15px;
+  letter-spacing: 2px;
+  color: #e2877b;
+}
+.goal-result.reached strong {
+  color: #bcf366;
+}
+.goal-result.practice strong {
+  color: #aab0bb;
+}
+.goal-result small {
+  display: block;
+  margin-top: 9px;
+  font-size: 10px;
+  color: #9aa0a8;
+}
+/* ---- 记录卡片目标标签 ---- */
+.goal-tag {
+  font-style: normal;
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  margin-left: 8px;
+  padding: 2px 7px;
+  border-radius: 20px;
+  border: 1px solid #6a5048;
+  color: #e2877b;
+}
+.goal-tag.reached {
+  border-color: #66764b;
+  color: #bcf366;
+}
 @media (min-width: 1500px) {
   .workspace {
     padding: 0 60px;

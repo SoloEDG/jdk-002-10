@@ -16,8 +16,17 @@ const best = computed(() => bestFor(props.records, props.trackId));
     <div v-if="latest && latest.trackId === trackId" class="result-mini">
       <b>{{ rank(latest.accuracy) }}</b>
       <div>
-        <strong>{{ latest.practice ? "练习已完成" : "演出已完成" }}</strong
-        ><small
+        <strong>
+          {{ latest.practice ? "练习已完成" : "演出已完成" }}
+          <em
+            v-if="!latest.practice && latest.target !== null && latest.target !== undefined"
+            class="goal-tag"
+            :class="{ reached: latest.goalReached }"
+            >{{ latest.goalReached ? "目标达标" : "未达目标"
+            }}·{{ latest.target }}%</em
+          >
+        </strong>
+        <small
           >{{ latest.title }} · {{ latest.score.toLocaleString() }} 分</small
         >
       </div>
